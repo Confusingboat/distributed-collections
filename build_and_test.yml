@@ -1,0 +1,73 @@
+name: Build & Test
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '*'
+    branches:
+      - 'main'
+      - 'gh-actions*'
+  pull_request:
+    branches:
+      - '*'
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
+  ArtifactDirectory: ${{ github.workspace}}/artifacts
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu
+    permissions:
+      checks: write
+      pull-requests: write
+    services:
+      cosmos:
+        redis: redis/redis-stack-server:latest
+        ports:
+          - 6379:6379
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8
+        dotnet-quality: ga
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Test
+      if: ${{ github.event_name == 'pull_request' || github.ref == 'refs/heads/main' }}
+      run: dotnet test --no-build --verbosity normal --logger:trx --results-directory ${{ env.ArtifactDirectory }}
+
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action/composite@v2
+      if: always()
+      with:
+        files: |
+          ${{ env.ArtifactDirectory }}/**/*.trx
+
+  tag:
+    if: ${{ github.event_name != 'pull_request' }}
+    uses: ./.github/workflows/tag.yml
+
+  release:
+    needs:
+      - tag
+      - build_and_test
+    if: ${{ github.event_name != 'pull_request' && needs.tag.outputs.prerelease-depth < 2 }}
+    uses: ./.github/workflows/release.yml
+    with:
+      version: ${{ needs.tag.outputs.version }}
+    secrets: inherit
