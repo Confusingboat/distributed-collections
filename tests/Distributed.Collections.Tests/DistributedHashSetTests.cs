@@ -81,6 +81,37 @@ public abstract class DistributedHashSetTests<THashSet, T> where THashSet : IDis
 
     #endregion
 
+    #region ContainsAsync Tests
+
+    [Fact]
+    public async Task ContainsAsync_should_return_true_when_item_exists()
+    {
+        // Arrange
+        var hashSet = await CreateHashSet();
+        await hashSet.AddAsync(TestValues[0]);
+
+        // Act
+        var result = await hashSet.ContainsAsync(TestValues[0]);
+
+        // Assert
+        result.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task ContainsAsync_should_return_false_when_item_does_not_exist()
+    {
+        // Arrange
+        var hashSet = await CreateHashSet();
+
+        // Act
+        var result = await hashSet.ContainsAsync(TestValues[0]);
+
+        // Assert
+        result.ShouldBeFalse();
+    }
+
+    #endregion
+
     protected abstract Task<THashSet> CreateHashSet();
 
     protected abstract T[] TestValues { get; }
