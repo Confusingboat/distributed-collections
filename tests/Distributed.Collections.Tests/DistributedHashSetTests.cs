@@ -143,6 +143,37 @@ public abstract class DistributedHashSetTests<THashSet, T> where THashSet : IDis
 
     #endregion
 
+    #region LongCountAsync Tests
+
+    [Fact]
+    public async Task LongCountAsync_should_return_0_when_hash_set_is_empty()
+    {
+        // Arrange
+        var hashSet = await CreateHashSet();
+
+        // Act
+        var result = await hashSet.LongCountAsync();
+
+        // Assert
+        result.ShouldBe(0);
+    }
+
+    [Fact]
+    public async Task LongCountAsync_should_return_1_when_hash_set_has_one_item()
+    {
+        // Arrange
+        var hashSet = await CreateHashSet();
+        await hashSet.AddAsync(TestValues[0]);
+
+        // Act
+        var result = await hashSet.LongCountAsync();
+
+        // Assert
+        result.ShouldBe(1);
+    }
+
+    #endregion
+
     protected abstract Task<THashSet> CreateHashSet();
 
     protected abstract T[] TestValues { get; }
