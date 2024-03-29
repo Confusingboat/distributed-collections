@@ -10,7 +10,7 @@ public static class Extensions
 {
     public static Task<T> ToTask<T>(this T value) => Task.FromResult(value);
 
-    public static async ValueTask<bool> TryDisposeAsync<T>(this T self) where T : class
+    public static async ValueTask<bool> TryDisposeAsync<T>(this T self)
     {
         if (self is not IAsyncDisposable disposable)
             return false;
@@ -19,7 +19,7 @@ public static class Extensions
         return true;
     }
 
-    public static bool TryDispose<T>(this T self) where T : class
+    public static bool TryDispose<T>(this T self)
     {
         if (self is not IDisposable disposable)
             return false;

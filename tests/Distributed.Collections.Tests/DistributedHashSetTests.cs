@@ -203,6 +203,8 @@ public abstract class DistributedHashSetTests<THashSet, T> :
     {
         if (_disposed || !_hashSet.IsValueCreated) return;
 
-        await _hashSet.Value.TryDisposeAsync();
+        _disposed = true;
+
+        await HashSet.TryDisposeAsync();
     }
 }
