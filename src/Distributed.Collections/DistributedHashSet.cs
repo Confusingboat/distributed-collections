@@ -8,7 +8,9 @@ public interface IHashSetFactory
     IDistributedHashSet<T> Create<T>(string name);
 }
 
-public interface IDistributedHashSet<T> : IAsyncEnumerable<T>
+public interface IDistributedHashSet { }
+
+public interface IDistributedHashSet<T> : IDistributedHashSet, IAsyncEnumerable<T>
 {
     Task<bool> AddAsync(T item);
     Task<bool> RemoveAsync(T item);

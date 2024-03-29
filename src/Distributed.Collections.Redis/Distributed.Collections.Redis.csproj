@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Distributed.Collections.Redis.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="StackExchange.Redis" Version="2.7.23" />
   </ItemGroup>
 

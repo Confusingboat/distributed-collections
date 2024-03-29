@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Distributed.Collections.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>
 
