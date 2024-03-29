@@ -17,18 +17,28 @@ public abstract class IntDistributedHashSetTests<THashSet>
     protected sealed override int[] TestValues => [1];
 }
 
-public abstract class DistributedHashSetTests<THashSet, T> where THashSet : IDistributedHashSet<T>
+public abstract class DistributedHashSetTests<THashSet, T> :
+    IAsyncLifetime
+    where THashSet : IDistributedHashSet<T>
 {
+    private bool _disposed;
+
+    private readonly Lazy<Task<THashSet>> _hashSet;
+
+    protected DistributedHashSetTests() => _hashSet = new(CreateHashSet);
+
+    protected THashSet HashSet => _hashSet.Value.Result;
+
+
     #region AddAsync Tests
 
     [Fact]
     public async Task AddAsync_should_add_item_when_it_does_not_exist()
     {
         // Arrange
-        var hashSet = await CreateHashSet();
 
         // Act
-        var result = await hashSet.AddAsync(TestValues[0]);
+        var result = await HashSet.AddAsync(TestValues[0]);
 
         // Assert
         result.ShouldBeTrue();
@@ -38,11 +48,10 @@ public abstract class DistributedHashSetTests<THashSet, T> where THashSet : IDis
     public async Task AddAsync_should_not_add_item_when_it_already_exists()
     {
         // Arrange
-        var hashSet = await CreateHashSet();
-        await hashSet.AddAsync(TestValues[0]);
+        await HashSet.AddAsync(TestValues[0]);
 
         // Act
-        var result = await hashSet.AddAsync(TestValues[0]);
+        var result = await HashSet.AddAsync(TestValues[0]);
 
         // Assert
         result.ShouldBeFalse();
@@ -56,11 +65,10 @@ public abstract class DistributedHashSetTests<THashSet, T> where THashSet : IDis
     public async Task RemoveAsync_should_remove_item_when_it_exists()
     {
         // Arrange
-        var hashSet = await CreateHashSet();
-        await hashSet.AddAsync(TestValues[0]);
+        await HashSet.AddAsync(TestValues[0]);
 
         // Act
-        var result = await hashSet.RemoveAsync(TestValues[0]);
+        var result = await HashSet.RemoveAsync(TestValues[0]);
 
         // Assert
         result.ShouldBeTrue();
@@ -70,10 +78,9 @@ public abstract class DistributedHashSetTests<THashSet, T> where THashSet : IDis
     public async Task RemoveAsync_should_not_remove_item_when_it_does_not_exist()
     {
         // Arrange
-        var hashSet = await CreateHashSet();
 
         // Act
-        var result = await hashSet.RemoveAsync(TestValues[0]);
+        var result = await HashSet.RemoveAsync(TestValues[0]);
 
         // Assert
         result.ShouldBeFalse();
@@ -87,11 +94,10 @@ public abstract class DistributedHashSetTests<THashSet, T> where THashSet : IDis
     public async Task ContainsAsync_should_return_true_when_item_exists()
     {
         // Arrange
-        var hashSet = await CreateHashSet();
-        await hashSet.AddAsync(TestValues[0]);
+        await HashSet.AddAsync(TestValues[0]);
 
         // Act
-        var result = await hashSet.ContainsAsync(TestValues[0]);
+        var result = await HashSet.ContainsAsync(TestValues[0]);
 
         // Assert
         result.ShouldBeTrue();
@@ -101,10 +107,9 @@ public abstract class DistributedHashSetTests<THashSet, T> where THashSet : IDis
     public async Task ContainsAsync_should_return_false_when_item_does_not_exist()
     {
         // Arrange
-        var hashSet = await CreateHashSet();
 
         // Act
-        var result = await hashSet.ContainsAsync(TestValues[0]);
+        var result = await HashSet.ContainsAsync(TestValues[0]);
 
         // Assert
         result.ShouldBeFalse();
@@ -118,10 +123,9 @@ public abstract class DistributedHashSetTests<THashSet, T> where THashSet : IDis
     public async Task CountAsync_should_return_0_when_hash_set_is_empty()
     {
         // Arrange
-        var hashSet = await CreateHashSet();
 
         // Act
-        var result = await hashSet.CountAsync();
+        var result = await HashSet.CountAsync();
 
         // Assert
         result.ShouldBe(0);
@@ -131,11 +135,10 @@ public abstract class DistributedHashSetTests<THashSet, T> where THashSet : IDis
     public async Task CountAsync_should_return_1_when_hash_set_has_one_item()
     {
         // Arrange
-        var hashSet = await CreateHashSet();
-        await hashSet.AddAsync(TestValues[0]);
+        await HashSet.AddAsync(TestValues[0]);
 
         // Act
-        var result = await hashSet.CountAsync();
+        var result = await HashSet.CountAsync();
 
         // Assert
         result.ShouldBe(1);
@@ -149,10 +152,9 @@ public abstract class DistributedHashSetTests<THashSet, T> where THashSet : IDis
     public async Task LongCountAsync_should_return_0_when_hash_set_is_empty()
     {
         // Arrange
-        var hashSet = await CreateHashSet();
 
         // Act
-        var result = await hashSet.LongCountAsync();
+        var result = await HashSet.LongCountAsync();
 
         // Assert
         result.ShouldBe(0);
@@ -162,11 +164,10 @@ public abstract class DistributedHashSetTests<THashSet, T> where THashSet : IDis
     public async Task LongCountAsync_should_return_1_when_hash_set_has_one_item()
     {
         // Arrange
-        var hashSet = await CreateHashSet();
-        await hashSet.AddAsync(TestValues[0]);
+        await HashSet.AddAsync(TestValues[0]);
 
         // Act
-        var result = await hashSet.LongCountAsync();
+        var result = await HashSet.LongCountAsync();
 
         // Assert
         result.ShouldBe(1);
@@ -177,4 +178,13 @@ public abstract class DistributedHashSetTests<THashSet, T> where THashSet : IDis
     protected abstract Task<THashSet> CreateHashSet();
 
     protected abstract T[] TestValues { get; }
+
+    public async Task InitializeAsync() => await _hashSet.Value;
+
+    public async Task DisposeAsync()
+    {
+        if (_disposed || !_hashSet.IsValueCreated) return;
+
+        await _hashSet.Value.TryDisposeAsync();
+    }
 }
