@@ -175,6 +175,24 @@ public abstract class DistributedHashSetTests<THashSet, T> :
 
     #endregion
 
+    #region ClearAsync Tests
+
+    [Fact]
+    public async Task ClearAsync_should_remove_all_items()
+    {
+        // Arrange
+        await HashSet.AddAsync(TestValues[0]);
+
+        // Act
+        await HashSet.ClearAsync();
+
+        // Assert
+        var count = await HashSet.CountAsync();
+        count.ShouldBe(0);
+    }
+
+    #endregion
+
     protected abstract Task<THashSet> CreateHashSet();
 
     protected abstract T[] TestValues { get; }
