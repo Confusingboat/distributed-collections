@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34616.47
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Distributed.Collections.Tests", "tests\Distributed.Collections.Tests\Distributed.Collections.Tests.csproj", "{DD19D032-3E66-4990-890D-3873537E816B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{797491C6-8CEB-4319-8806-ED4514648ED1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{914818D9-D689-46FB-BE8B-1C1C03D83ECA}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build_and_test.yml = .github\workflows\build_and_test.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
+		.github\workflows\tag.yml = .github\workflows\tag.yml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Distributed.Collections", "src\Distributed.Collections\Distributed.Collections.csproj", "{226DB6D6-32D9-4A65-8A70-A20FB1197C6B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Distributed.Collections.Redis", "src\Distributed.Collections.Redis\Distributed.Collections.Redis.csproj", "{F7894007-7DC2-4A4B-AE42-F5CE15B7A57B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Distributed.Collections.Redis.Tests", "tests\Distributed.Collections.Redis.Tests\Distributed.Collections.Redis.Tests.csproj", "{08BDFB09-E7E7-4FCA-9BD9-DA63D24033B2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2BBB78B9-083B-4237-99F5-A590E49DB789}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{512531A2-6D2D-4A62-BBC7-2BEA3C531408}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DD19D032-3E66-4990-890D-3873537E816B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD19D032-3E66-4990-890D-3873537E816B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD19D032-3E66-4990-890D-3873537E816B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD19D032-3E66-4990-890D-3873537E816B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{226DB6D6-32D9-4A65-8A70-A20FB1197C6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{226DB6D6-32D9-4A65-8A70-A20FB1197C6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{226DB6D6-32D9-4A65-8A70-A20FB1197C6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{226DB6D6-32D9-4A65-8A70-A20FB1197C6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7894007-7DC2-4A4B-AE42-F5CE15B7A57B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7894007-7DC2-4A4B-AE42-F5CE15B7A57B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7894007-7DC2-4A4B-AE42-F5CE15B7A57B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7894007-7DC2-4A4B-AE42-F5CE15B7A57B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08BDFB09-E7E7-4FCA-9BD9-DA63D24033B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08BDFB09-E7E7-4FCA-9BD9-DA63D24033B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08BDFB09-E7E7-4FCA-9BD9-DA63D24033B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08BDFB09-E7E7-4FCA-9BD9-DA63D24033B2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DD19D032-3E66-4990-890D-3873537E816B} = {512531A2-6D2D-4A62-BBC7-2BEA3C531408}
+		{914818D9-D689-46FB-BE8B-1C1C03D83ECA} = {797491C6-8CEB-4319-8806-ED4514648ED1}
+		{226DB6D6-32D9-4A65-8A70-A20FB1197C6B} = {2BBB78B9-083B-4237-99F5-A590E49DB789}
+		{F7894007-7DC2-4A4B-AE42-F5CE15B7A57B} = {2BBB78B9-083B-4237-99F5-A590E49DB789}
+		{08BDFB09-E7E7-4FCA-9BD9-DA63D24033B2} = {512531A2-6D2D-4A62-BBC7-2BEA3C531408}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A45838C5-8918-4AEE-BDC0-A6F3865CB0ED}
+	EndGlobalSection
+EndGlobal
