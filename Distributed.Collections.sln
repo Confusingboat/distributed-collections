@@ -9,14 +9,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{7974
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{914818D9-D689-46FB-BE8B-1C1C03D83ECA}"
 	ProjectSection(SolutionItems) = preProject
-		build_and_test.yml = build_and_test.yml
+		.github\workflows\build_and_test.yml = .github\workflows\build_and_test.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
+		.github\workflows\tag.yml = .github\workflows\tag.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Distributed.Collections", "src\Distributed.Collections\Distributed.Collections.csproj", "{226DB6D6-32D9-4A65-8A70-A20FB1197C6B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Distributed.Collections.Redis", "src\Distributed.Collections.Redis\Distributed.Collections.Redis.csproj", "{F7894007-7DC2-4A4B-AE42-F5CE15B7A57B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Distributed.Collections.Redis.Tests", "tests\Distributed.Collection.Redis.Tests\Distributed.Collections.Redis.Tests.csproj", "{08BDFB09-E7E7-4FCA-9BD9-DA63D24033B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Distributed.Collections.Redis.Tests", "tests\Distributed.Collection.Redis.Tests\Distributed.Collections.Redis.Tests.csproj", "{08BDFB09-E7E7-4FCA-9BD9-DA63D24033B2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2BBB78B9-083B-4237-99F5-A590E49DB789}"
 EndProject

@@ -18,4 +18,11 @@
     <ProjectReference Include="..\Distributed.Collections\Distributed.Collections.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="minver" Version="4.3.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>
