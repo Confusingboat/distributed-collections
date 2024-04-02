@@ -64,6 +64,6 @@ jobs:
         run: |
           dotnet nuget push "${{ env.ArtifactDirectory }}/*.nupkg" -s "github"
     
-      # - name: Publish to nuget.org
-      #   run: |
-      #     dotnet nuget push "${{ env.ArtifactDirectory }}/*.nupkg" -k ${{ secrets.NUGET_ORG_API_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Publish to nuget.org
+        run: |
+          dotnet nuget push "${{ env.ArtifactDirectory }}/*.nupkg" -k ${{ secrets.NUGET_ORG_API_KEY }} -s https://api.nuget.org/v3/index.json
