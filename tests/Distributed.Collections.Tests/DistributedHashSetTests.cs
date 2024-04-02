@@ -7,14 +7,14 @@ public abstract class StringDistributedHashSetTests<THashSet>
     : DistributedHashSetTests<THashSet, string>
     where THashSet : IDistributedHashSet<string>
 {
-    protected sealed override string[] TestValues => ["one"];
+    protected sealed override string[] TestValues => ["one", "five", "negative ten", "infinity", "negative infinity"];
 }
 
 public abstract class IntDistributedHashSetTests<THashSet>
     : DistributedHashSetTests<THashSet, int>
     where THashSet : IDistributedHashSet<int>
 {
-    protected sealed override int[] TestValues => [1];
+    protected sealed override int[] TestValues => [1, 5, -10, int.MinValue, int.MaxValue];
 }
 
 public abstract class DistributedHashSetTests<THashSet, T> :
@@ -189,6 +189,26 @@ public abstract class DistributedHashSetTests<THashSet, T> :
         // Assert
         var count = await HashSet.CountAsync();
         count.ShouldBe(0);
+    }
+
+    #endregion
+
+    #region IAsyncEnumerable Tests
+
+    [Fact]
+    public async Task IAsyncEnumerable_should_enumerate_all_items()
+    {
+        // Arrange
+        foreach (var item in TestValues)
+        {
+            await HashSet.AddAsync(item);
+        }
+
+        // Act
+        var items = await HashSet.ToArrayAsync();
+
+        // Assert
+        items.ShouldBe(TestValues, true);
     }
 
     #endregion
