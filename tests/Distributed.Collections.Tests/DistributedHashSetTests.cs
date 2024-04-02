@@ -1,5 +1,4 @@
 using Shouldly;
-using System.Collections.Frozen;
 
 namespace Distributed.Collections.Tests;
 
