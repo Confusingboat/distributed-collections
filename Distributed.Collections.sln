@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Distributed.Collections", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Distributed.Collections.Redis", "src\Distributed.Collections.Redis\Distributed.Collections.Redis.csproj", "{F7894007-7DC2-4A4B-AE42-F5CE15B7A57B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Distributed.Collections.Redis.Tests", "tests\Distributed.Collection.Redis.Tests\Distributed.Collections.Redis.Tests.csproj", "{08BDFB09-E7E7-4FCA-9BD9-DA63D24033B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Distributed.Collections.Redis.Tests", "tests\Distributed.Collections.Redis.Tests\Distributed.Collections.Redis.Tests.csproj", "{08BDFB09-E7E7-4FCA-9BD9-DA63D24033B2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2BBB78B9-083B-4237-99F5-A590E49DB789}"
 EndProject
