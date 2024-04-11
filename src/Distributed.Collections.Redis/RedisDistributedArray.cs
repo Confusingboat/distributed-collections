@@ -89,6 +89,10 @@ public class RedisDistributedArray<T> : IDistributedArray<T>
 
             _initialized = true;
         }
+        catch (Exception ex)
+        {
+            throw new Exception("Unable to initialize", ex);
+        }
         finally
         {
             _initializationSemaphore.Release();
