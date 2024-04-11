@@ -11,6 +11,7 @@ public class RedisDistributedArray<T> : IDistributedArray<T>
     private readonly string _arrayKey;
     private readonly long _length;
 
+    private readonly SemaphoreSlim _initializationSemaphore = new(1, 1);
     private bool _initialized;
 
     public RedisDistributedArray(IDatabase database, string arrayKey, long length)
@@ -26,59 +27,72 @@ public class RedisDistributedArray<T> : IDistributedArray<T>
         _length = length;
     }
 
-    public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = new CancellationToken()) =>
+    public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default) =>
         _database.HashScanAsync(_arrayKey)
             .Select(entry => _serializer.Deserialize<T>(entry.Value))
             .GetAsyncEnumerator(cancellationToken);
 
-    public async Task<T> GetValueAsync(int index) =>
-        _serializer.Deserialize<T>(
+    public async Task<T> GetValueAsync(int index)
+    {
+        if (!_initialized) await TryInitializeAsync();
+
+        return _serializer.Deserialize<T>(
             await _database.HashGetAsync(
                 _arrayKey,
                 index.ToString()));
+    }
 
-    public async Task SetValueAsync(int index, T value) =>
+    public async Task SetValueAsync(int index, T value)
+    {
+        if (!_initialized) await TryInitializeAsync();
+
         await _database.HashSetAsync(
             _arrayKey,
             index.ToString(),
             _serializer.Serialize(value));
+    }
 
     public int Length => (int)_length;
 
     public long LongLength => _length;
 
-    private ValueTask EnsureInitializedAsync() =>
-        _initialized
-            ? ValueTask.CompletedTask
-            : new ValueTask(TryInitializeAsync());
-
     private async Task TryInitializeAsync()
     {
-        var metadata = await GetMetadataAsync();
-        if (metadata.Initialized)
+        await _initializationSemaphore.WaitAsync();
+        try
         {
+            if (_initialized) return;
+
+            var metadata = await GetMetadataAsync();
+            if (metadata.Initialized)
+            {
+                _initialized = true;
+                return;
+            }
+
+            if (await _database.HashSetAsync(
+                    _arrayKey,
+                    ArrayMetadataFieldName,
+                    _serializer.Serialize(new ArrayMetadata(_length, true)),
+                    when: When.NotExists))
+            {
+                _initialized = true;
+                return;
+            }
+
+            metadata = await GetMetadataAsync();
+
+            if (metadata.Length != _length)
+            {
+                throw new InvalidOperationException("Array length mismatch.");
+            }
+
             _initialized = true;
-            return;
         }
-
-        if (await _database.HashSetAsync(
-                _arrayKey,
-                ArrayMetadataFieldName,
-                _serializer.Serialize(new ArrayMetadata(_length, true)),
-                when: When.NotExists))
+        finally
         {
-            _initialized = true;
-            return;
+            _initializationSemaphore.Release();
         }
-
-        metadata = await GetMetadataAsync();
-
-        if (metadata.Length != _length)
-        {
-            throw new InvalidOperationException("Array length mismatch.");
-        }
-
-        _initialized = true;
     }
 
     private async Task<ArrayMetadata> GetMetadataAsync() =>
@@ -86,12 +100,6 @@ public class RedisDistributedArray<T> : IDistributedArray<T>
             await _database.HashGetAsync(_arrayKey, ArrayMetadataFieldName));
 
     private record struct ArrayMetadata(long Length, bool Initialized);
-
-    private T Deserialize(RedisValue value) =>
-        _serializer.Deserialize<T>(value);
-
-    private RedisValue Serialize(T value) =>
-        _serializer.Serialize(value);
 }
 
 public record struct RedisArrayReference(string ParentArrayKey, string ArrayKey, long Length);
